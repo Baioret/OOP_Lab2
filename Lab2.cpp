@@ -73,7 +73,7 @@ public:
 
     ColoredPoint(const ColoredPoint& p) {
 
-        printf("ColoredPoint(const Point& p)\n");
+        printf("ColoredPoint(const ColoredPoint& p)\n");
 
         color = p.color;
         x = p.x;
@@ -93,12 +93,55 @@ public:
     }
 };
 
+class Section {
+
+protected:
+    Point* p1;
+    Point* p2;
+
+public:
+
+    Section() {
+
+        printf("Section()\n");
+
+        p1 = new Point;
+        p2 = new Point;
+    }
+
+    Section(int x1, int y1, int x2, int y2) {
+
+        printf("Section(int x1, int y1, int x2, int y2)\n");
+
+        p1 = new Point(x1, y1);
+        p2 = new Point(x2, y2);
+    }
+
+    Section(const Section& s) {
+
+        printf("Section(const Section& s)\n");
+
+        p1 = new Point(*s.p1); // p1 - указатель на
+        p2 = new Point(*s.p2); // Point - разименовываем
+    }
+
+    ~Section() {
+
+        //printf("%d, %d\n", x, y);
+
+        delete p1;
+        delete p2;
+
+        printf("~Section()\n");
+    }
+};
+
 void Point::reset() {
     x = 0;
     y = 0;
 }
 
-void chapterOne()
+void partOne()
 {
     // Работа со статическими и динамическими объектами
     // Их создание и уничтожение
@@ -129,7 +172,7 @@ void chapterOne()
     delete p3;
 }
 
-void chapterTwo()
+void partTwo()
 {
     // Реализация методов
     // Доступность атрибутов
@@ -145,7 +188,7 @@ void chapterTwo()
     delete p;
 }
 
-void chapterThree()
+void partThree()
 {
     // Наследование
 
@@ -157,7 +200,7 @@ void chapterThree()
     delete p;
 }
 
-void chapterFour()
+void partFour()
 {
     // Помещение объектов в переменные
     // различных типов
@@ -196,15 +239,46 @@ void chapterFour()
     delete p2;
 }
 
+void partFive()
+{
+    cout << "\nPART FIVE!\n" << endl;
+
+
+    // Вариант копирования #1 (поверхностное коп.)
+    // p1 = s.p1;
+    // p2 = s.p2;
+
+    // В таком случае при удалении второго объекта
+    // возникает ошибка!
+
+    // Вместо этого мы используем 
+    // конструктор копирования
+    // (глубокое копирование)
+
+
+     Section* s1 = new Section;
+     Section* s2 = new Section(1, 2, 3, 4);
+     Section* s3 = new Section(*s2);
+
+
+     cout << "\nDeleting" << endl;
+
+     delete s1;
+     delete s2;
+     delete s3;
+}
+
 int main()
 {
-    chapterOne();
+    partOne();
 
-    chapterTwo();
+    partTwo();
 
-    chapterThree();
+    partThree();
 
-    chapterFour();
+    partFour();
+
+    partFive();
 
     return 0;
 }
