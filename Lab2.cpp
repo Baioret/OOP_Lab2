@@ -3,8 +3,11 @@
 using namespace std;
 
 class Point {
-public:
+
+protected:
     int x, y;
+
+public:
 
     Point() {
 
@@ -36,10 +39,27 @@ public:
 
         printf("~Point()\n");
     }
+
+    void move(int dx, int dy) {
+
+        x = x + dx;
+        y = y + dy;
+    }
+
+    void reset();
 };
 
-int main()
+void Point::reset() {
+    x = 0;
+    y = 0;
+}
+
+void chapterOne()
 {
+    // Работа со статическими и динамическими объектами
+    // Их создание и уничтожение
+
+
     cout << "Static objects: " << endl;
 
     {
@@ -52,16 +72,41 @@ int main()
 
     cout << "\nDinamic objects: " << endl;
 
-    Point *p = new Point;
+    Point* p = new Point;
 
-    Point *p2 = new Point(10, 20);
+    Point* p2 = new Point(10, 20);
 
-    Point *p3 = new Point(*p2);
-    
+    Point* p3 = new Point(*p2);
+
 
     delete p;
     delete p2;
     delete p3;
+}
+
+void chapterTwo()
+{
+    // Реализация методов
+    // Доступность атрибутов
+
+    cout << "\nMethods reset() and move(int dx, int dy): " << endl;
+
+    Point* p = new Point(1, 2);
+
+    p->reset();
+    p->move(10, 10);
+    
+    delete p;
+}
+
+int main()
+{
+    chapterOne();
+
+    chapterTwo();
+
+
+
 
     return 0;
 }
