@@ -5,11 +5,12 @@ using namespace std;
 class Point {
 
 protected:
+
     int x, y;
 
 public:
 
-    Point() {
+    Point() { // Конструктор по умолчанию
 
         printf("Point()\n");
 
@@ -17,7 +18,7 @@ public:
         y = 0;
     }
 
-    Point(int x, int y) {
+    Point(int x, int y) { // Конструктор с парам.
 
         printf("Point(int x, int y)\n");
 
@@ -25,7 +26,7 @@ public:
         this->y = y;
     }
 
-    Point(const Point& p) {
+    Point(const Point& p) { // Конструктор копир-я
 
         printf("Point(const Point& p)\n");
 
@@ -33,7 +34,7 @@ public:
         y = p.y;
     }
 
-    ~Point() {
+    ~Point() { // Деструктор
 
         printf("%d, %d\n", x, y);
 
@@ -46,8 +47,13 @@ public:
         y = y + dy;
     }
 
-    void reset();
+    virtual void reset();
 };
+
+void Point::reset() { // Реализация после определения
+    x = 0;
+    y = 0;
+}
 
 class ColoredPoint: public Point {
 
@@ -66,18 +72,16 @@ public:
 
     ColoredPoint(int x, int y, int color) : Point(x, y) {
 
-        printf("ColoredPoint(int x, int y)\n");
+        printf("ColoredPoint(int x, int y, int color)\n");
 
         this->color = color;
     }
 
-    ColoredPoint(const ColoredPoint& p) {
+    ColoredPoint(const ColoredPoint& p) : Point(p) {
 
         printf("ColoredPoint(const ColoredPoint& p)\n");
 
         color = p.color;
-        x = p.x;
-        y = p.y;
     }
 
     ~ColoredPoint() {
@@ -90,6 +94,10 @@ public:
     void changeColor(int new_color) {
 
         color = new_color;
+    }
+
+    void reset() {
+        color = 0;
     }
 };
 
@@ -117,7 +125,7 @@ public:
         p2 = new Point(x2, y2);
     }
 
-    Section(const Section& s) {
+    Section(const Section& s) { // Глубокое копирование
 
         printf("Section(const Section& s)\n");
 
@@ -135,11 +143,6 @@ public:
         printf("~Section()\n");
     }
 };
-
-void Point::reset() {
-    x = 0;
-    y = 0;
-}
 
 void partOne()
 {
@@ -268,6 +271,267 @@ void partFive()
      delete s3;
 }
 
+//____________________________
+
+class Point3D {
+
+private:
+
+    void movePoint3DPrivate(int dx, int dy, int dz)
+    {
+        x = x + dx;
+        y = y + dy;
+        z = z + dz;
+    }
+
+    /*virtual void reset()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+    }*/
+
+protected:
+
+    int x, y, z;
+
+    /*virtual void reset()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+    }*/
+
+    void foo()
+    {
+        cout << "\n!Protected! method foo\n";
+    }
+
+public:
+
+    void movePoint3D(int dx, int dy, int dz)
+    {
+        movePoint3DPrivate(dx, dy, dz); // Использовать private методы
+                                        // можно только внутри класса
+    }
+
+    Point3D()
+    {
+        printf("Point3D()\n");
+
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+
+    Point3D(int x, int y, int z) {
+
+        printf("Point3D(int x, int y, int z)\n");
+
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+
+    Point3D(const Point3D& p) {
+
+        printf("Point3D(const Point3D& p)\n");
+
+        x = p.x;
+        y = p.y;
+        z = p.z;
+    }
+
+    ~Point3D() {
+
+        printf("%d, %d, %d\n", x, y, z);
+
+        printf("~Point3D()\n");
+    }
+
+    virtual void reset()
+    {
+        cout << "\nreset (Point3D)\n";
+
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+};
+
+class ColoredPoint3D : public Point3D {
+
+protected:
+
+    int color;
+
+public:
+
+    ColoredPoint3D() : Point3D()
+    {
+        printf("ColoredPoint3D()\n");
+
+        color = 0;
+    }
+
+    ColoredPoint3D(int x, int y, int z, int color) : Point3D(x, y, z) {
+
+        printf("ColoredPoint3D(int x, int y, int z, int color)\n");
+
+        this->color = color;
+    }
+
+    ColoredPoint3D(const ColoredPoint3D& p) : Point3D(p){
+
+        printf("ColoredPoint3D(const ColoredPoint3D& p)\n");
+
+        color = p.color;
+    }
+
+    ~ColoredPoint3D() {
+
+        printf("%d, %d, %d, color = %d\n", x, y, z, color);
+
+        printf("~ColoredPoint3D()\n");
+    }
+
+    void reset() // Перекрытие метода reset
+    {
+        cout << "\nreset (ColoredPoint)\n";
+
+        x = 0;
+        y = 0;
+        z = 0;
+        color = 0;
+    }
+
+    void foo2()
+    {
+        cout << "\nfoo2";
+        foo(); // protected метод можно использовать только внутри потомка
+    }
+};
+
+//class A {
+//
+//public:
+//    void foo3() {
+//        foo(); // потому что это не потомок Point3D
+//    }
+//
+//};
+
+//____________________________
+
+class Base {
+
+public:
+
+    Base() {
+        cout << "Base constructor\n";
+    }
+
+    ~Base() {
+        cout << "Base destructor\n";
+    }
+
+};
+
+class Descendant1 : public Base {
+
+public:
+
+    Descendant1() {
+        cout << "Descendant1 constructor\n";
+    }
+
+    ~Descendant1() {
+        cout << "Descendant1 destructor\n";
+    }
+
+};
+
+class Descendant2 : public Base {
+
+};
+
+void partSix()
+{
+
+    cout << "\nPART SIX!\n" << endl;
+
+    Point3D* p1 = new ColoredPoint3D();
+
+    cout << "\n";
+
+    ColoredPoint3D* p2 = new ColoredPoint3D(1, 2, 3, 4);
+
+    cout << "\n";
+
+    ColoredPoint3D* p3 = new ColoredPoint3D(*p2);
+
+    p1->movePoint3D(1, 2, 3);
+    p1->reset();
+
+    p2->movePoint3D(1, 2, 3);
+    p2->reset();
+
+    cout << "\nDeleting\n\n";
+
+    delete p1;
+
+    cout << "\n";
+
+    delete p2;
+
+    cout << "\n";
+
+    delete p3;
+}
+
+void partSeven()
+{
+    cout << "\nPART SEVEN!\n" << endl;
+
+    Base* a1 = new Base;
+
+    cout << endl;
+
+    Base* b1 = new Descendant1;
+
+    cout << endl;
+
+    Descendant1* c1 = new Descendant1;
+
+    cout << endl << endl;
+
+    Base* a2 = new Base;
+
+    cout << endl;
+
+    Base* b2 = new Descendant2;
+
+    cout << endl;
+
+    Descendant2* c2 = new Descendant2;
+
+    cout << "\nDeleting\n\n";
+
+    delete a1;
+    cout << endl;
+    delete b1;
+    cout << endl;
+    delete c1;
+
+    cout << endl << endl;
+
+    delete a2;
+    cout << endl;
+    delete b2;
+    cout << endl;
+    delete c2;
+}
+
 int main()
 {
     partOne();
@@ -280,6 +544,9 @@ int main()
 
     partFive();
 
+    partSix();
+
+    partSeven();
+
     return 0;
 }
-
