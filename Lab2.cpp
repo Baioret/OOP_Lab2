@@ -125,7 +125,7 @@ public:
         p2 = new Point(x2, y2);
     }
 
-    Section(const Section& s) { // Глубокое копирование
+    Section(const Section& s) {
 
         printf("Section(const Section& s)\n");
 
@@ -133,7 +133,7 @@ public:
         p2 = new Point(*s.p2);
     }
 
-    Section(Section* s) { // Глубокое копирование
+    Section(Section* s) {
 
         printf("Section(Section* s)\n");
 
