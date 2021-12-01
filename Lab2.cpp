@@ -10,7 +10,7 @@ protected:
 
 public:
 
-    Point() { // Конструктор по умолчанию
+    Point() {
 
         printf("Point()\n");
 
@@ -18,7 +18,7 @@ public:
         y = 0;
     }
 
-    Point(int x, int y) { // Конструктор с парам.
+    Point(int x, int y) {
 
         printf("Point(int x, int y)\n");
 
@@ -26,7 +26,7 @@ public:
         this->y = y;
     }
 
-    Point(const Point& p) { // Конструктор копир-я
+    Point(const Point& p) {
 
         printf("Point(const Point& p)\n");
 
@@ -50,7 +50,7 @@ public:
     virtual void reset();
 };
 
-void Point::reset() { // Реализация после определения
+void Point::reset() {
     x = 0;
     y = 0;
 }
@@ -129,13 +129,19 @@ public:
 
         printf("Section(const Section& s)\n");
 
-        p1 = new Point(*s.p1); // p1 - указатель на
-        p2 = new Point(*s.p2); // Point - разименовываем
+        p1 = new Point(*s.p1);
+        p2 = new Point(*s.p2);
+    }
+
+    Section(Section* s) { // Глубокое копирование
+
+        printf("Section(Section* s)\n");
+
+        p1 = new Point(*s->p1);
+        p2 = new Point(*s->p2);
     }
 
     ~Section() {
-
-        //printf("%d, %d\n", x, y);
 
         delete p1;
         delete p2;
@@ -262,7 +268,7 @@ void partFive()
      Section* s1 = new Section;
      Section* s2 = new Section(1, 2, 3, 4);
      Section* s3 = new Section(*s2);
-
+     Section* s4 = new Section(s2);
 
      cout << "\nDeleting" << endl;
 
